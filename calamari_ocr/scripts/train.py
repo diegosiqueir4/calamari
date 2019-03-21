@@ -196,6 +196,7 @@ def run(args):
     dataset_args = {
         'line_generator_params': args.line_generator_params,
         'text_generator_params': args.text_generator_params,
+        'processes': args.num_threads
     }
 
     # Training dataset
@@ -218,7 +219,7 @@ def run(args):
 
     dataset = create_dataset(
         args.dataset,
-        DataSetMode.TRAIN,
+        DataSetMode.TRAIN_ON_THE_FLY if args.train_data_on_the_fly else DataSetMode.TRAIN,
         images=input_image_files,
         texts=gt_txt_files,
         skip_invalid=not args.no_skip_invalid_gt,
@@ -244,7 +245,7 @@ def run(args):
 
         validation_dataset = create_dataset(
             args.validation_dataset,
-            DataSetMode.TRAIN,
+            DataSetMode.TRAIN_ON_THE_FLY if args.train_data_on_the_fly else DataSetMode.TRAIN,
             images=validation_image_files,
             texts=val_txt_files,
             skip_invalid=not args.no_skip_invalid_gt,

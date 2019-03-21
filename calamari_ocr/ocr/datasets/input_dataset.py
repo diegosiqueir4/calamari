@@ -75,7 +75,7 @@ class InputDataset:
         self.data_augmentation_amount = data_augmentation_amount
         self.generate_only_non_augmented = False
 
-        if data_augmenter and dataset.mode != DataSetMode.TRAIN:
+        if data_augmenter and dataset.mode != DataSetMode.TRAIN and dataset.mode != DataSetMode.TRAIN_ON_THE_FLY:
             raise Exception('Data augmentation is only supported for training, but got {} dataset instead'.format(dataset.mode))
 
         if data_augmentation_amount > 0 and self.data_augmenter is None:
@@ -107,7 +107,7 @@ class InputDataset:
 
         self.preloaded_datas, self.preloaded_texts, self.preloaded_params = datas, texts, params
 
-        if self.dataset.mode == DataSetMode.TRAIN and self.data_augmentation_amount > 0:
+        if (self.dataset.mode == DataSetMode.TRAIN or self.dataset.mode == DataSetMode.TRAIN_ON_THE_FLY) and self.data_augmentation_amount > 0:
             abs_n_augs = int(self.data_augmentation_amount) if self.data_augmentation_amount >= 1 else int(self.data_augmentation_amount * len(self))
             self.preloaded_datas, self.preloaded_texts \
                 = self.data_augmenter.augment_datas(datas, texts, n_augmentations=abs_n_augs,
@@ -126,7 +126,7 @@ class InputDataset:
 
     def generator(self, processes=1) -> Generator[Tuple[np.array, List[str], Any], None, None]:
         if len(self.preloaded_datas) > 0:
-            if self.dataset.mode == DataSetMode.TRAIN:
+            if self.dataset.mode == DataSetMode.TRAIN or self.dataset.mode == DataSetMode.TRAIN_ON_THE_FLY:
                 # train mode wont generate parameters
                 if self.generate_only_non_augmented:
                     # preloaded params store the 'length' of the non augmented data

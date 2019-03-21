@@ -34,7 +34,7 @@ class Hdf5DataSet(DataSet):
             if mode == DataSetMode.PREDICT:
                 self.prediction[filename] = {'transcripts': [], 'codec': codec}
 
-            if mode == DataSetMode.TRAIN:
+            if mode == DataSetMode.TRAIN or mode == DataSetMode.TRAIN_ON_THE_FLY:
                 for i, (image, shape, text) in enumerate(zip(f['images'], f['images_dims'], f['transcripts'])):
                     image = np.reshape(image, shape)
                     text = "".join([codec[c] for c in text])

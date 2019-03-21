@@ -12,6 +12,7 @@ class DataSetMode(Enum):
     TRAIN = 0
     PREDICT = 1
     EVAL = 2
+    TRAIN_ON_THE_FLY = 3
 
 
 class DataSet(ABC):
@@ -179,7 +180,7 @@ class DataSet(ABC):
         return self._samples
 
     def is_sample_valid(self, sample, line, text):
-        if self.mode == DataSetMode.PREDICT or self.mode == DataSetMode.TRAIN:
+        if self.mode == DataSetMode.PREDICT or self.mode == DataSetMode.TRAIN or self.mode == DataSetMode.TRAIN_ON_THE_FLY:
             # skip invalid imanges (e. g. corrupted or empty files)
             if line is None or (line.size == 0 or np.amax(line) == np.amin(line)):
                 return False

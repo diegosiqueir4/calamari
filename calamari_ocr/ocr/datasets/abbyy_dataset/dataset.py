@@ -70,13 +70,13 @@ class AbbyyDataSet(DataSet):
         line = sample["line"]
         text = None
         img = None
-        if self.mode == DataSetMode.EVAL or self.mode == DataSetMode.TRAIN:
+        if self.mode == DataSetMode.EVAL or self.mode == DataSetMode.TRAIN or self.mode == DataSetMode.TRAIN_ON_THE_FLY:
             text = sample["format"].text
 
         if text_only:
             return img, text
 
-        if self.mode == DataSetMode.TRAIN or self.mode == DataSetMode.PREDICT:
+        if self.mode == DataSetMode.TRAIN or self.mode == DataSetMode.PREDICT or self.mode == DataSetMode.TRAIN_ON_THE_FLY:
             img = np.array(Image.open(image_path))
 
             ly, lx = img.shape
